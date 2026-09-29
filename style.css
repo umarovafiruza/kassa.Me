@@ -1,0 +1,1446 @@
+/* ==========================================================================
+   OILAVIY XARAJATLAR TRACKER - APPLE WALLET & iOS HIG DESIGN SYSTEM
+   Uslub: Apple Human Interface Guidelines, Frosted Glass, Segmented Controls,
+   Inset Grouped Lists, Dark Mode & Sheet Modals.
+   ========================================================================== */
+
+/* 1. TIZIM VA MAVZU SOZLAMALARI (CSS VARIABLES) */
+:root {
+  /* iOS Light Theme ranglari */
+  --ios-bg-system: #f2f2f7;
+  --ios-bg-grouped: #f2f2f7;
+  --ios-bg-card: #ffffff;
+  --ios-bg-secondary-card: #f9f9fb;
+  --ios-bg-tertiary: #f2f2f7;
+  --ios-bg-element: rgba(118, 118, 128, 0.12);
+  --ios-bg-element-active: #ffffff;
+  
+  --ios-text-primary: #000000;
+  --ios-text-secondary: #8e8e93;
+  --ios-text-tertiary: #c7c7cc;
+  
+  --ios-separator: rgba(60, 60, 67, 0.18);
+  --ios-separator-subtle: rgba(60, 60, 67, 0.08);
+
+  /* Apple rangli aksentlari */
+  --ios-emerald: #0f766e;
+  --ios-emerald-light: rgba(15, 118, 110, 0.12);
+  --ios-blue: #007aff;
+  --ios-indigo: #5856d6;
+  --ios-purple: #af52de;
+  --ios-pink: #ff2d55;
+  --ios-red: #ff3b30;
+  --ios-orange: #ff9500;
+  --ios-yellow: #ffcc00;
+  --ios-green: #34c759;
+
+  /* Asosiy interaktiv urg'u rangi */
+  --accent-color: #0f766e;
+  --accent-hover: #115e59;
+  --accent-text: #ffffff;
+
+  /* Radiuslar (Apple Corner Radii) */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  --radius-pill: 9999px;
+
+  /* Apple Soyalari */
+  --ios-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --ios-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --ios-shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.15);
+  --ios-shadow-segment: 0 2px 5px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+
+  /* Tipografiya */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --transition-smooth: 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-snap: 0.16s ease-out;
+}
+
+/* 2. TIZIM VA QORONG'I REJIM (DARK MODE) */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --ios-bg-system: #000000;
+    --ios-bg-grouped: #000000;
+    --ios-bg-card: #1c1c1e;
+    --ios-bg-secondary-card: #2c2c2e;
+    --ios-bg-tertiary: #2c2c2e;
+    --ios-bg-element: rgba(118, 118, 128, 0.28);
+    --ios-bg-element-active: #636366;
+
+    --ios-text-primary: #ffffff;
+    --ios-text-secondary: #98989d;
+    --ios-text-tertiary: #48484a;
+
+    --ios-separator: rgba(84, 84, 88, 0.55);
+    --ios-separator-subtle: rgba(84, 84, 88, 0.25);
+    --ios-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --ios-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ios-bg-system: #000000;
+  --ios-bg-grouped: #000000;
+  --ios-bg-card: #1c1c1e;
+  --ios-bg-secondary-card: #2c2c2e;
+  --ios-bg-tertiary: #2c2c2e;
+  --ios-bg-element: rgba(118, 118, 128, 0.28);
+  --ios-bg-element-active: #636366;
+
+  --ios-text-primary: #ffffff;
+  --ios-text-secondary: #98989d;
+  --ios-text-tertiary: #48484a;
+
+  --ios-separator: rgba(84, 84, 88, 0.55);
+  --ios-separator-subtle: rgba(84, 84, 88, 0.25);
+  --ios-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --ios-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+  --ios-bg-system: #f2f2f7;
+  --ios-bg-grouped: #f2f2f7;
+  --ios-bg-card: #ffffff;
+  --ios-bg-secondary-card: #f9f9fb;
+  --ios-bg-tertiary: #f2f2f7;
+  --ios-bg-element: rgba(118, 118, 128, 0.12);
+  --ios-bg-element-active: #ffffff;
+
+  --ios-text-primary: #000000;
+  --ios-text-secondary: #8e8e93;
+  --ios-text-tertiary: #c7c7cc;
+
+  --ios-separator: rgba(60, 60, 67, 0.18);
+  --ios-separator-subtle: rgba(60, 60, 67, 0.08);
+}
+
+/* 3. RESET VA GLOBAL ELEMETLAR */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--ios-bg-system);
+  color: var(--ios-text-primary);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: max(16px, env(safe-area-inset-top)) 14px max(92px, calc(72px + env(safe-area-inset-bottom)));
+  min-height: 100vh;
+  overscroll-behavior-y: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+/* Matn va inputlarni belgilashga ruxsat */
+input, select, textarea, .stat-val, .card-amount, .item-amount {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 4. KONTEYNER */
+.app-viewport {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 5. IOS HEADER */
+.ios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 8px;
+}
+
+.header-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  object-fit: cover;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.28), 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: transform var(--transition-snap);
+}
+
+.brand-logo-img:hover {
+  transform: scale(1.05);
+}
+
+.brand-text-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-top-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+
+.tg-user-greeting {
+  display: none;
+  align-items: center;
+  font-size: 0.71875rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  background: var(--ios-bg-card);
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--ios-shadow-subtle);
+}
+
+:root[data-theme="dark"] .tg-user-greeting {
+  background: #2c2c2e;
+}
+
+.tg-user-greeting.visible {
+  display: inline-flex;
+}
+
+.family-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.71875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent-color);
+  background: var(--ios-bg-card);
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--ios-shadow-subtle);
+}
+
+:root[data-theme="dark"] .family-pill {
+  background: #2c2c2e;
+}
+
+.family-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+}
+
+.header-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--ios-text-primary);
+}
+
+.header-subtitle {
+  font-size: 0.84375rem;
+  color: var(--ios-text-secondary);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ios-icon-btn {
+  background: var(--ios-bg-card);
+  border: 1px solid var(--ios-separator-subtle);
+  color: var(--ios-text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.15rem;
+  box-shadow: var(--ios-shadow-subtle);
+  transition: transform var(--transition-snap), background-color var(--transition-snap);
+}
+
+.ios-icon-btn:hover {
+  transform: scale(1.05);
+}
+
+.ios-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* Theme Icon boshqaruvi */
+.light-icon {
+  display: inline;
+}
+.dark-icon {
+  display: none;
+}
+
+:root[data-theme="dark"] .light-icon {
+  display: none;
+}
+:root[data-theme="dark"] .dark-icon {
+  display: inline;
+}
+
+/* Dropdown menyu (Eksport va Tiklash) */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: var(--ios-bg-card);
+  border: 1px solid var(--ios-separator-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 6px;
+  min-width: 220px;
+  display: none;
+  flex-direction: column;
+  z-index: 100;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+}
+
+.dropdown-menu.show {
+  display: flex;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  color: var(--ios-text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color var(--transition-snap);
+}
+
+.dropdown-item:hover {
+  background-color: var(--ios-bg-element);
+}
+
+.dropdown-item.text-danger {
+  color: var(--ios-red);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--ios-separator-subtle);
+  margin: 4px 6px;
+}
+
+/* 6. APPLE WALLET ASOSIY KARTA (HERO CARD) */
+.apple-wallet-card {
+  position: relative;
+  background: linear-gradient(135deg, #091e1d 0%, #0f3d39 45%, #0f766e 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 30px 32px 26px;
+  box-shadow: 0 16px 36px -10px rgba(15, 118, 110, 0.35), 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.card-glass-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+.wallet-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-brand-tag {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.card-eyebrow {
+  font-size: 0.78125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.75;
+}
+
+.card-amount {
+  font-size: 2.875rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.wallet-badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.wallet-card-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.wallet-stat-divider {
+  width: 1px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.wallet-stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-caption {
+  font-size: 0.71875rem;
+  font-weight: 500;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-val {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Faol a'zolar mini avatarlari */
+.members-mini-avatars {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.mini-avatar-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #0f3d39;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-left: -5px;
+}
+
+.mini-avatar-badge:first-child {
+  margin-left: 0;
+}
+
+/* 7. QUICK ACTION BUTTON (YANGI XARAJAT KIRITISH) */
+.quick-action-bar {
+  display: flex;
+}
+
+.btn-apple-add {
+  width: 100%;
+  background: var(--ios-bg-card);
+  border: 1px solid var(--ios-separator-subtle);
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  color: var(--accent-color);
+  font-family: inherit;
+  font-size: 1.03125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: var(--ios-shadow-subtle);
+  transition: all var(--transition-snap);
+}
+
+.btn-apple-add:hover {
+  background-color: var(--ios-bg-secondary-card);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: var(--ios-shadow-card);
+}
+
+.btn-apple-add:active {
+  transform: scale(0.985);
+}
+
+.btn-plus-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 8. TAB VIEWS BOSHQARUVI */
+.tab-view {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeInTab 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-view.active {
+  display: flex;
+}
+
+@keyframes fadeInTab {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Asosiy sahifadagi 'Barchasi ->' matnli tugma */
+.btn-text-link {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-xs);
+  transition: opacity var(--transition-snap), background-color var(--transition-snap);
+}
+
+.btn-text-link:hover {
+  opacity: 0.8;
+  background-color: var(--ios-bg-tertiary);
+}
+
+/* Home mini statistik widget */
+.widget-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.widget-stat-card {
+  background-color: var(--ios-bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid var(--ios-separator-subtle);
+}
+
+.widget-stat-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ios-text-secondary);
+}
+
+.widget-stat-amount {
+  font-size: 0.90625rem;
+  font-weight: 700;
+  color: var(--ios-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 9. IOS INSET GROUPED CARD */
+.ios-inset-group {
+  background-color: var(--ios-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ios-separator-subtle);
+  box-shadow: var(--ios-shadow-subtle);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.history-group {
+  min-height: auto;
+  padding: 16px 16px;
+}
+
+.history-group .group-header-with-segment {
+  gap: 8px;
+}
+
+.history-group .ios-group-title {
+  font-size: 1.03125rem;
+}
+
+.history-group .ios-subtitle {
+  font-size: 0.75rem;
+}
+
+.history-group .filter-segmented .segment-btn {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+.group-header-with-segment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ios-group-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ios-text-primary);
+}
+
+.ios-subtitle {
+  font-size: 0.8125rem;
+  color: var(--ios-text-secondary);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* 10. APPLE STYLE SEGMENTED CONTROL */
+.ios-segmented-control {
+  background-color: var(--ios-bg-element);
+  border-radius: 9px;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.segment-btn {
+  background: transparent;
+  border: none;
+  color: var(--ios-text-secondary);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all var(--transition-snap);
+  white-space: nowrap;
+}
+
+.segment-btn.active {
+  background-color: var(--ios-bg-element-active);
+  color: var(--ios-text-primary);
+  box-shadow: var(--ios-shadow-segment);
+}
+
+:root[data-theme="dark"] .segment-btn.active {
+  color: #ffffff;
+}
+
+/* 11. STATISTIKA PANELLARI (KATEGORIYALAR & A'ZOLAR) */
+.stats-panel {
+  display: none;
+}
+
+.stats-panel.active {
+  display: block;
+}
+
+.stats-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-row-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-row-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-name-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ios-text-primary);
+}
+
+.stat-amount-label {
+  font-size: 0.78125rem;
+  color: var(--ios-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-percent-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ios-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-bar-track {
+  width: 100%;
+  height: 5px;
+  background-color: var(--ios-bg-tertiary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent-color);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 12. GORIZONTAL PILLS (FILTER BAR) */
+.ios-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0 6px;
+  border-bottom: 1px solid var(--ios-separator-subtle);
+}
+
+.ios-pills-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.pill-btn {
+  background-color: var(--ios-bg-tertiary);
+  border: 1px solid transparent;
+  color: var(--ios-text-secondary);
+  font-family: inherit;
+  font-size: 0.71875rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-snap);
+}
+
+.pill-btn:hover {
+  color: var(--ios-text-primary);
+}
+
+.pill-btn.active {
+  background-color: var(--ios-text-primary);
+  color: var(--ios-bg-card);
+}
+
+.pills-separator {
+  width: 1px;
+  height: 14px;
+  background-color: var(--ios-separator-subtle);
+  margin: 0 3px;
+}
+
+/* 13. XARAJATLAR RO'YXATI (INSET GROUPED LIST ROWS) */
+.ios-list-wrapper {
+  flex-grow: 1;
+}
+
+.ios-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.ios-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 2px;
+  border-bottom: 1px solid var(--ios-separator-subtle);
+  transition: background-color var(--transition-snap);
+}
+
+.ios-list-item:last-child {
+  border-bottom: none;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 68%;
+}
+
+/* Oila a'zosi avatari */
+.member-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* A'zolar uchun Apple uslubidagi individual ranglar */
+.avatar-ota { background: linear-gradient(135deg, #007aff, #0051ba); }
+.avatar-ona { background: linear-gradient(135deg, #ff2d55, #c70039); }
+.avatar-men { background: linear-gradient(135deg, #0f766e, #044e47); }
+.avatar-farzand { background: linear-gradient(135deg, #ff9500, #c75c00); }
+.avatar-umumiy { background: linear-gradient(135deg, #5856d6, #3634a3); }
+
+.item-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.item-title {
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--ios-text-primary);
+  word-break: break-word;
+}
+
+.item-meta {
+  font-size: 0.6875rem;
+  color: var(--ios-text-secondary);
+}
+
+/* Kategoriya Badge (iOS Chips) */
+.ios-badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 1.5px 6px;
+  border-radius: 5px;
+  line-height: 1.2;
+}
+
+.badge-ozik-ovkat { background: #fef3c7; color: #92400e; }
+.badge-kommunal  { background: #e0f2fe; color: #0369a1; }
+.badge-transport { background: #f3e8ff; color: #6b21a8; }
+.badge-talim     { background: #dcfce7; color: #15803d; }
+.badge-soglik    { background: #ffe4e6; color: #be123c; }
+.badge-boshqa    { background: #f3f4f6; color: #4b5563; }
+
+:root[data-theme="dark"] .badge-ozik-ovkat { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+:root[data-theme="dark"] .badge-kommunal  { background: rgba(14, 165, 233, 0.2); color: #38bdf8; }
+:root[data-theme="dark"] .badge-transport { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+:root[data-theme="dark"] .badge-talim     { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+:root[data-theme="dark"] .badge-soglik    { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+:root[data-theme="dark"] .badge-boshqa    { background: rgba(107, 114, 128, 0.25); color: #d1d5db; }
+
+.item-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-amount {
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ios-text-primary);
+  white-space: nowrap;
+}
+
+.btn-ios-delete {
+  background: transparent;
+  border: none;
+  color: var(--ios-text-tertiary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition-snap);
+}
+
+.btn-ios-delete:hover {
+  background-color: rgba(255, 59, 48, 0.12);
+  color: var(--ios-red);
+}
+
+/* Bo'sh holat (Empty State) */
+.ios-empty-state {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 56px 20px;
+}
+
+.ios-empty-state.visible {
+  display: flex;
+}
+
+.empty-icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--ios-bg-tertiary);
+  color: var(--ios-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.empty-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--ios-text-primary);
+  margin-bottom: 4px;
+}
+
+.empty-desc {
+  font-size: 0.875rem;
+  color: var(--ios-text-secondary);
+  max-width: 280px;
+  margin-bottom: 18px;
+}
+
+.btn-apple-secondary {
+  background-color: var(--ios-bg-tertiary);
+  border: 1px solid var(--ios-separator-subtle);
+  color: var(--ios-text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--transition-snap);
+}
+
+.btn-apple-secondary:hover {
+  background-color: var(--ios-bg-element);
+}
+
+/* 14. IOS BOTTOM SHEET MODAL */
+.ios-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.ios-sheet-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ios-sheet-modal {
+  width: 100%;
+  max-width: 560px;
+  background-color: var(--ios-bg-card);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  border: 1px solid var(--ios-separator-subtle);
+  border-bottom: none;
+  box-shadow: var(--ios-shadow-sheet);
+  padding: 12px 24px 34px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.ios-sheet-backdrop.open .ios-sheet-modal {
+  transform: translateY(0);
+}
+
+.sheet-grabber {
+  width: 36px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background-color: var(--ios-text-tertiary);
+  margin: 0 auto 12px;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ios-separator-subtle);
+}
+
+.sheet-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sheet-action-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: var(--accent-color);
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.sheet-action-btn.font-bold {
+  font-weight: 700;
+}
+
+/* Katta raqamli Apple Card input qismi */
+.amount-hero-input-box {
+  padding: 24px 0 16px;
+  text-align: center;
+}
+
+.amount-hero-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ios-text-secondary);
+}
+
+.amount-hero-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.amount-hero-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--ios-text-primary);
+  text-align: right;
+  width: 220px;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-hero-input::placeholder {
+  color: var(--ios-text-tertiary);
+}
+
+.amount-hero-currency {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ios-text-secondary);
+}
+
+/* Preset tugmalari */
+.amount-presets {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-chip {
+  background-color: var(--ios-bg-tertiary);
+  border: 1px solid var(--ios-separator-subtle);
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+  font-size: 0.78125rem;
+  font-weight: 600;
+  color: var(--ios-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-snap);
+}
+
+.preset-chip:hover {
+  background-color: var(--ios-bg-element);
+}
+
+.preset-chip:active {
+  transform: scale(0.95);
+}
+
+/* iOS Inset Form Group */
+.ios-form-group {
+  background-color: var(--ios-bg-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ios-separator-subtle);
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.row-label {
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--ios-text-primary);
+  min-width: 110px;
+}
+
+.row-input,
+.row-select {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.90625rem;
+  color: var(--ios-text-primary);
+  text-align: right;
+}
+
+.date-input {
+  cursor: pointer;
+}
+
+.row-select {
+  cursor: pointer;
+  direction: rtl;
+}
+
+.row-select option {
+  direction: ltr;
+  background-color: var(--ios-bg-card);
+  color: var(--ios-text-primary);
+}
+
+/* A'zo tanlagichi (Segmented Member Picker) */
+.segmented-member-picker {
+  display: flex;
+  gap: 4px;
+  background-color: var(--ios-bg-element);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.member-pick-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: var(--ios-text-secondary);
+  transition: all var(--transition-snap);
+}
+
+.member-pick-btn.active {
+  background-color: var(--ios-bg-card);
+  color: var(--ios-text-primary);
+  box-shadow: var(--ios-shadow-subtle);
+}
+
+.error-msg {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--ios-red);
+  margin-top: 4px;
+}
+
+.error-msg.visible {
+  display: block;
+}
+
+.form-row-error {
+  display: none;
+  padding: 2px 16px 8px;
+  background-color: var(--ios-bg-tertiary);
+}
+
+.form-row-error.visible {
+  display: block;
+}
+
+.sheet-submit-wrap {
+  margin-top: 20px;
+}
+
+.btn-apple-primary {
+  width: 100%;
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-snap);
+}
+
+.btn-apple-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-apple-primary:active {
+  transform: scale(0.985);
+}
+
+/* 15. IOS BOTTOM NAVIGATION BAR */
+.ios-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-top: 1px solid var(--ios-separator-subtle);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 900;
+  padding: 4px 16px;
+  padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .ios-bottom-bar {
+  background: rgba(28, 28, 30, 0.88);
+}
+
+.bar-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--ios-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-snap);
+  flex: 1;
+  max-width: 90px;
+}
+
+.bar-tab-btn:active {
+  transform: scale(0.92);
+}
+
+.bar-tab-btn.active {
+  color: var(--accent-color);
+}
+
+.bar-tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-snap);
+}
+
+.bar-tab-btn.active .bar-tab-icon {
+  transform: translateY(-1px);
+}
+
+.bar-tab-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Markazdagi Ko'tarilgan Zumrad Yashil Qo'shish Tugmasi */
+.bar-center-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -18px;
+  flex: 1;
+  max-width: 64px;
+}
+
+.bar-add-action-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f766e, #0d6059);
+  color: #ffffff;
+  border: 3px solid var(--ios-bg-card);
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-snap), box-shadow var(--transition-snap);
+}
+
+:root[data-theme="dark"] .bar-add-action-btn {
+  border-color: #1c1c1e;
+}
+
+.bar-add-action-btn:hover {
+  transform: scale(1.06);
+}
+
+.bar-add-action-btn:active {
+  transform: scale(0.92);
+}
+
+.bar-add-plus {
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-top: -2px;
+}
+
+/* 16. FOOTER */
+.ios-footer {
+  text-align: center;
+  padding: 16px 0 24px;
+  font-size: 0.78125rem;
+  color: var(--ios-text-secondary);
+  opacity: 0.8;
+}
+
+/* 17. RESPONSIVE MEDIA QUERIES */
+@media (max-width: 520px) {
+  body {
+    padding: 12px 10px 88px;
+  }
+
+  .brand-logo-img {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+  }
+
+  .header-title {
+    font-size: 1.45rem;
+  }
+
+  .card-amount {
+    font-size: 2.15rem;
+  }
+
+  .wallet-card-footer {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ios-inset-group {
+    padding: 14px 12px;
+  }
+
+  .amount-hero-input {
+    font-size: 2.35rem;
+    width: 180px;
+  }
+
+  .item-left {
+    max-width: 60%;
+  }
+}

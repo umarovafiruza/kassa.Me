@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="system">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Yashnar &bull; Oilaviy Xarajatlar</title>
+  <meta name="description" content="Yashnar - Apple iOS va Wallet uslubidagi toza, minimalist va zamonaviy oilaviy xarajatlar nazorati dasturi.">
+  <meta name="theme-color" content="#f2f2f7" id="metaThemeColor">
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="stylesheet" href="style.css">
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <!-- Asosiy Konteyner -->
+  <div class="app-viewport">
+    
+    <!-- Yuqori Navigatsiya / Header -->
+    <header class="ios-header">
+      <div class="header-brand-wrap">
+        <img src="logo.jpg" alt="Yashnar Logotipi" class="brand-logo-img">
+        <div class="brand-text-col">
+          <div class="brand-top-row">
+            <span class="family-pill">
+              <span class="family-dot"></span>
+              Yashnar &bull; Oilaviy Moliya
+            </span>
+            <span id="tgUserGreeting" class="tg-user-greeting"></span>
+          </div>
+          <h1 class="header-title">Yashnar</h1>
+          <p class="header-subtitle" id="currentDateText">Yuklanmoqda...</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- iOS Style Dark Mode Toggle -->
+        <button type="button" id="themeToggleBtn" class="ios-icon-btn" aria-label="Mavzuni almashtirish" title="Tungi / Kunduzgi rejim">
+          <span class="theme-icon light-icon" aria-hidden="true">&#9788;</span>
+          <span class="theme-icon dark-icon" aria-hidden="true">&#9790;</span>
+        </button>
+
+        <!-- Eksport & Zaxira menyusi -->
+        <div class="dropdown-wrapper">
+          <button type="button" id="dataMenuBtn" class="ios-icon-btn" aria-label="Ma'lumotlar menyusi" title="Eksport va zaxira">
+            &hellip;
+          </button>
+          <div class="dropdown-menu" id="dataDropdownMenu">
+            <button type="button" class="dropdown-item" id="exportCsvBtn">
+              <span>CSV (Excel) yuklab olish</span>
+            </button>
+            <button type="button" class="dropdown-item" id="exportJsonBtn">
+              <span>JSON zaxira fayli olish</span>
+            </button>
+            <label class="dropdown-item" for="importJsonInput">
+              <span>Zaxiradan tiklash (Import)</span>
+              <input type="file" id="importJsonInput" accept=".json" style="display: none;">
+            </label>
+            <div class="dropdown-divider"></div>
+            <button type="button" class="dropdown-item text-danger" id="clearAllBtn">
+              <span>Barchasini tozalash</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         TAB 1: ASOSIY SAHIFA (HOME)
+         ========================================== -->
+    <section id="viewHome" class="tab-view active" aria-label="Asosiy bosh sahifa">
+      
+      <!-- Apple Wallet Asosiy Karta -->
+      <div class="apple-wallet-card" aria-label="Asosiy balans kartasi">
+        <div class="card-glass-shine"></div>
+        <div class="wallet-card-header">
+          <div>
+            <div class="card-brand-tag">YASHNAR WALLET</div>
+            <span class="card-eyebrow">Jami sarflangan mablag‘</span>
+            <div class="card-amount" id="totalAmount">0 so‘m</div>
+          </div>
+          <div class="wallet-badge" id="totalCountBadge">0 ta xarajat</div>
+        </div>
+
+        <!-- Karta pastki qismi: A'zolar va O'rtacha summa -->
+        <div class="wallet-card-footer">
+          <div class="wallet-stat-cell">
+            <span class="stat-caption">O‘rtacha xarajat</span>
+            <span class="stat-val" id="averageAmount">0 so‘m</span>
+          </div>
+          <div class="wallet-stat-divider"></div>
+          <div class="wallet-stat-cell">
+            <span class="stat-caption">Eng katta soha</span>
+            <span class="stat-val" id="topCategoryName">—</span>
+          </div>
+          <div class="wallet-stat-divider"></div>
+          <div class="wallet-stat-cell">
+            <span class="stat-caption">Faol a’zolar</span>
+            <div class="members-mini-avatars" id="activeMembersAvatars">
+              <!-- Mini avatarlar -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tezkor Qo'shish Tugmasi -->
+      <div class="quick-action-bar">
+        <button type="button" id="openAddSheetBtn" class="btn-apple-add">
+          <span class="btn-plus-icon">+</span>
+          <span>Yangi xarajat kiritish</span>
+        </button>
+      </div>
+
+      <!-- So'nggi amallar (Home Preview) -->
+      <div class="ios-inset-group home-recent-group">
+        <div class="group-header-with-segment">
+          <div>
+            <h2 class="ios-group-title">So‘nggi operatsiyalar</h2>
+            <span class="ios-subtitle" id="homeRecentSubtitle">Eng oxirgi xarajatlar</span>
+          </div>
+          <button type="button" class="btn-text-link" id="goToHistoryLink">
+            Barchasi &rarr;
+          </button>
+        </div>
+
+        <ul id="homeRecentList" class="ios-list">
+          <!-- JS orqali oxirgi 3 ta xarajat chiziladi -->
+        </ul>
+      </div>
+
+      <!-- Tezkor mini statistika xulosasi -->
+      <div class="ios-inset-group home-summary-widget">
+        <h2 class="ios-group-title" style="margin-bottom: 10px;">Xarajatlar qisqacha ko‘rinishi</h2>
+        <div class="widget-stats-grid" id="homeMiniStats">
+          <!-- JS orqali eng asosiy 3 ta kategoriya ko'rsatiladi -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         TAB 2: TAHLIL VA STATISTIKA (ANALYTICS)
+         ========================================== -->
+    <section id="viewAnalytics" class="tab-view" aria-label="Xarajatlar tahlili sahifasi">
+      <div class="ios-inset-group">
+        
+        <div class="group-header-with-segment">
+          <div>
+            <h2 class="ios-group-title">Xarajatlar tahlili</h2>
+            <span class="ios-subtitle">Byudjet taqsimoti va ulushlar</span>
+          </div>
+          
+          <!-- Apple Style Segmented Control (Kategoriyalar / Oila a'zolari) -->
+          <div class="ios-segmented-control" role="tablist">
+            <button type="button" class="segment-btn active" role="tab" id="tabCategories" data-target="categories">
+              Kategoriyalar
+            </button>
+            <button type="button" class="segment-btn" role="tab" id="tabMembers" data-target="members">
+              Oila a’zolari
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Kategoriyalar statistikasi -->
+        <div id="categoriesStatsView" class="stats-panel active">
+          <div class="stats-rows" id="categoryStatsList">
+            <!-- JS orqali to'ldiriladi -->
+          </div>
+        </div>
+
+        <!-- 2. Oila a'zolari statistikasi -->
+        <div id="membersStatsView" class="stats-panel">
+          <div class="stats-rows" id="memberStatsList">
+            <!-- JS orqali to'ldiriladi -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 3: AMALLAR TARIXI (HISTORY)
+         ========================================== -->
+    <section id="viewHistory" class="tab-view" aria-label="Amallar tarixi sahifasi">
+      <div class="ios-inset-group history-group">
+        
+        <!-- Guruh sarlavhasi va vaqt filtri -->
+        <div class="group-header-with-segment">
+          <div>
+            <h2 class="ios-group-title">Amallar tarixi</h2>
+            <span class="ios-subtitle" id="historyCounterText">0 ta qayd</span>
+          </div>
+
+          <!-- Vaqt filtri: Barchasi / Bu oy / Shu hafta -->
+          <div class="ios-segmented-control filter-segmented" role="tablist">
+            <button type="button" class="segment-btn active" data-period="all">Barchasi</button>
+            <button type="button" class="segment-btn" data-period="month">Bu oy</button>
+            <button type="button" class="segment-btn" data-period="week">Hafta</button>
+          </div>
+        </div>
+
+        <!-- Kategoriya va a'zo bo'yicha gorizontal tezkor filtr (Scrollable pills) -->
+        <div class="ios-pills-bar" id="pillsBar">
+          <button type="button" class="pill-btn active" data-filter-type="category" data-filter-value="all">Barchasi</button>
+          <div class="pills-separator"></div>
+          <!-- Dinamik kategoriya va a'zo pill tugmalari JS orqali to'ldiriladi -->
+        </div>
+
+        <!-- Qaydlar ro'yxati -->
+        <div class="ios-list-wrapper">
+          <ul id="expenseList" class="ios-list" role="list">
+            <!-- Qaydlar JS orqali qo'shiladi -->
+          </ul>
+
+          <!-- Bo'sh holat (Empty State) -->
+          <div id="emptyState" class="ios-empty-state">
+            <div class="empty-icon-circle">&#9745;</div>
+            <p class="empty-title">Xarajatlar mavjud emas</p>
+            <p class="empty-desc">Tanlangan parametrlar bo‘yicha hech qanday operatsiya topilmadi.</p>
+            <button type="button" id="loadDemoBtn" class="btn-apple-secondary">
+              Namunaviy xarajatlarni yuklash
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Pastki qism / Footer (Faqat sahifa oxirida) -->
+    <footer class="ios-footer">
+      <p>Yashnar &bull; Apple HIG standartidagi oilaviy moliya ilovasi</p>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================
+       MOBIL QURILMALAR UCHUN PASTKI TAB BAR (IOS BOTTOM NAVIGATION)
+       ========================================== -->
+  <nav class="ios-bottom-bar" id="bottomNavBar" aria-label="Mobil navigatsiya paneli">
+    
+    <!-- 1. Asosiy Tab -->
+    <button type="button" class="bar-tab-btn active" data-tab-target="viewHome">
+      <span class="bar-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </span>
+      <span class="bar-tab-title">Asosiy</span>
+    </button>
+
+    <!-- 2. Tahlil Tab -->
+    <button type="button" class="bar-tab-btn" data-tab-target="viewAnalytics">
+      <span class="bar-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+      </span>
+      <span class="bar-tab-title">Tahlil</span>
+    </button>
+
+    <!-- 3. Markaziy Qo'shish Tugmasi -->
+    <div class="bar-center-wrap">
+      <button type="button" class="bar-add-action-btn" id="barAddActionBtn" aria-label="Yangi xarajat kiritish">
+        <span class="bar-add-plus">+</span>
+      </button>
+    </div>
+
+    <!-- 4. Tarix Tab -->
+    <button type="button" class="bar-tab-btn" data-tab-target="viewHistory">
+      <span class="bar-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </span>
+      <span class="bar-tab-title">Tarix</span>
+    </button>
+
+  </nav>
+
+  <!-- ==========================================
+       IOS BOTTOM SHEET MODAL: YANGI XARAJAT QO'SHISH
+       ========================================== -->
+  <div class="ios-sheet-backdrop" id="sheetBackdrop" aria-hidden="true">
+    <div class="ios-sheet-modal" role="dialog" aria-modal="true" aria-labelledby="sheetModalTitle">
+      
+      <!-- Sheet sudrash paneli (Grabber) -->
+      <div class="sheet-grabber"></div>
+
+      <!-- Sheet Header -->
+      <div class="sheet-header">
+        <button type="button" id="closeSheetBtn" class="sheet-action-btn">Bekor qilish</button>
+        <h3 id="sheetModalTitle" class="sheet-title">Yangi xarajat</h3>
+        <button type="submit" form="expenseForm" class="sheet-action-btn font-bold">Saqlash</button>
+      </div>
+
+      <!-- Sheet Content Form -->
+      <form id="expenseForm" class="sheet-form" novalidate>
+        
+        <!-- Apple Card Katta Summa Kiritish Maydoni -->
+        <div class="amount-hero-input-box">
+          <label for="expenseAmount" class="amount-hero-label">Summani kiriting</label>
+          <div class="amount-hero-row">
+            <input 
+              type="number" 
+              id="expenseAmount" 
+              name="expenseAmount"
+              class="amount-hero-input" 
+              placeholder="0" 
+              min="1" 
+              step="any"
+              required
+            >
+            <span class="amount-hero-currency">so‘m</span>
+          </div>
+          <!-- Tezkor preset tugmalari (+50k, +100k, +500k) -->
+          <div class="amount-presets">
+            <button type="button" class="preset-chip" data-add="50000">+ 50 000</button>
+            <button type="button" class="preset-chip" data-add="100000">+ 100 000</button>
+            <button type="button" class="preset-chip" data-add="500000">+ 500 000</button>
+            <button type="button" class="preset-chip" data-add="1000000">+ 1 000 000</button>
+          </div>
+          <span class="error-msg" id="amountError">Iltimos, noldan katta summa kiriting</span>
+        </div>
+
+        <!-- Forma maydonlari (iOS Inset List Form) -->
+        <div class="ios-form-group">
+          
+          <!-- Xarajat nomi -->
+          <div class="form-row">
+            <label for="expenseName" class="row-label">Tavsif / Nom</label>
+            <input 
+              type="text" 
+              id="expenseName" 
+              name="expenseName"
+              class="row-input" 
+              placeholder="Masalan: Bozorlik, Benzin..." 
+              autocomplete="off"
+              required
+            >
+          </div>
+          <div class="form-row-error" id="nameErrorRow">
+            <span class="error-msg visible" id="nameError">Xarajat nomi bo‘sh bo‘lishi mumkin emas</span>
+          </div>
+
+          <!-- Oila a'zosi (Apple Family) -->
+          <div class="form-row">
+            <label class="row-label">Kim sarfladi?</label>
+            <div class="segmented-member-picker" id="memberPicker">
+              <!-- JS orqali a'zolar tanlovi (Ota, Ona, Men, Farzandlar) -->
+            </div>
+          </div>
+
+          <!-- Kategoriya tanlash -->
+          <div class="form-row">
+            <label for="expenseCategory" class="row-label">Kategoriya</label>
+            <select id="expenseCategory" name="expenseCategory" class="row-select" required>
+              <option value="Oziq-ovqat">Oziq-ovqat</option>
+              <option value="Kommunal">Kommunal</option>
+              <option value="Transport">Transport</option>
+              <option value="Ta'lim">Ta'lim</option>
+              <option value="Sog‘liq">Sog‘liq</option>
+              <option value="Boshqa">Boshqa</option>
+            </select>
+          </div>
+
+          <!-- Sana (Ixtiyoriy, standart bugungi sana) -->
+          <div class="form-row">
+            <label for="expenseDate" class="row-label">Sana</label>
+            <input type="date" id="expenseDate" class="row-input date-input">
+          </div>
+
+        </div>
+
+        <!-- Pastki saqlash tugmasi -->
+        <div class="sheet-submit-wrap">
+          <button type="submit" class="btn-apple-primary">
+            Xarajatni kiritish
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
